@@ -12,7 +12,7 @@
             <ColumnDefinition Width="79*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0">
-            <TextBlock TextWrapping="Wrap" Text="TextBlock"/>
+            <TextBlock TextWrapping="Wrap" Text="Server App" TextAlignment="Center" FontSize="20"/>
             <DockPanel LastChildFill="True">
                 <Button Content="Start Server" Width="100"/>
                 <ComboBox x:Name="PortComboBox" SelectedIndex="0">
@@ -27,21 +27,21 @@
                 <TextBlock x:Name="ClientStateDisp" Height="24" TextWrapping="Wrap" Foreground="Red" Text="Brak klienta"/>
                 </StackPanel>
             </Border>
-            <Button Content="Wybierz Plik"/>
+            <Button Content="Wybierz Plik" Click="WybierzPlik_Click"/>
             <Border BorderThickness="1" BorderBrush="Gray">
-                <TextBlock x:Name="FilePathDisp" Height="23" TextWrapping="Wrap" Text="TextBox"/>
+                <TextBlock x:Name="FilePathDisp" Height="40" TextWrapping="Wrap"/>
             </Border>
             <DockPanel LastChildFill="True">
                 <TextBlock Height="23" TextWrapping="Wrap" Text="Rozmiar" Width="60"/>
                 <Border BorderThickness="1,0" BorderBrush="Gray">
-                    <TextBlock x:Name="FileSizeDisp" Height="23" TextWrapping="Wrap" Text="TextBox"/>
+                    <TextBlock x:Name="FileSizeDisp" Height="23" TextWrapping="Wrap"/>
                 </Border>
             </DockPanel>
             <Button Content="Wyślij do klienta"/>
             <ProgressBar Height="20" Visibility="Hidden"/>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1">
-            <TextBlock TextWrapping="Wrap" Text="TextBlock"/>
+            <TextBlock x:Name="LogBox" TextWrapping="Wrap" Height="418"/>
         </StackPanel>
     </Grid>
 </Window>

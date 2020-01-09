@@ -1,0 +1,14 @@
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\bin\Debug\ProjektKlient-Server.exe.config
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\bin\Debug\ProjektKlient-Server.exe
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\bin\Debug\ProjektKlient-Server.pdb
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server.csprojAssemblyReference.cache
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\MainWindow.g.cs
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\App.g.cs
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server_MarkupCompile.cache
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server_MarkupCompile.lref
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\MainWindow.baml
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server.g.resources
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient_Server.Properties.Resources.resources
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server.csproj.GenerateResource.cache
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server.exe
+C:\Users\Dawid\source\repos\ProjektKlient-Server\ProjektKlient-Server\obj\Debug\ProjektKlient-Server.pdb
