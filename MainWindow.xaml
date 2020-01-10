@@ -14,7 +14,7 @@
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock TextWrapping="Wrap" Text="Server App" TextAlignment="Center" FontSize="20"/>
             <DockPanel LastChildFill="True">
-                <Button Content="Start Server" Width="100"/>
+                <Button x:Name="StartStopButton" Content="Start Server" Width="100" Click="ToggleStartStopServer_Click"/>
                 <ComboBox x:Name="PortComboBox" SelectedIndex="0">
                     <ComboBoxItem Content="5000" HorizontalAlignment="Left"/>
                     <ComboBoxItem Content="5001" HorizontalAlignment="Left"/>

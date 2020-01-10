@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
 
+
 namespace ProjektKlient_Server
 {
     /// <summary>
@@ -22,9 +24,41 @@ namespace ProjektKlient_Server
     /// </summary>
     public partial class MainWindow : Window
     {
+        MyTcpListener server = new MyTcpListener();
         public MainWindow()
         {
+            server.StateInfo += Server_StateInfo;
             InitializeComponent();
+
+        }
+
+        private void Server_StateInfo(object sender, EventArgs e)
+        {
+            if ( e is MyTcpListenerEventArgs)
+            {
+                MyTcpListenerEventArgs myArgs = e as MyTcpListenerEventArgs;
+                if (myArgs.ServerState == true)
+                {
+                    this.ServerStateDisp.Text = "Serwer włączony";
+                    this.ServerStateDisp.Foreground = Brushes.Green;
+                }
+                else
+                {
+                    this.ServerStateDisp.Text = "Serwer wyłączony";
+                    this.ServerStateDisp.Foreground = Brushes.Red;
+                }
+                if (myArgs.ClientState == true)
+                {
+                    this.ClientStateDisp.Text = "Klient podłączony";
+                    this.ClientStateDisp.Foreground = Brushes.Green;
+                }
+                else 
+                { 
+                    this.ClientStateDisp.Text = "Klient niepodłączony";
+                    this.ClientStateDisp.Foreground = Brushes.Red;
+                }
+            }
+            
         }
 
         private void WybierzPlik_Click(object sender, RoutedEventArgs e)
@@ -60,6 +94,26 @@ namespace ProjektKlient_Server
             {
                 LogBox.Text += ex.ToString();
                 throw;
+            }
+        }
+
+        private void ToggleStartStopServer_Click(object sender, RoutedEventArgs e)
+        {
+            if (server.ServerOn == false)
+            {
+                //Start serwera na porcie wskazanym w comboboxie
+                server.CreateAndStartListeningServer(Int32.Parse(this.PortComboBox.Text.ToString()));
+                server.ServerOn = true;
+                this.PortComboBox.IsEnabled = false;
+                this.StartStopButton.Content = "Stop Server";
+            }
+            else
+            {
+                //Zatrzymanie serwera
+                server.StopServer();
+                server.ServerOn = false;
+                this.StartStopButton.Content = "Start Server";
+                this.PortComboBox.IsEnabled = true;
             }
         }
     }
