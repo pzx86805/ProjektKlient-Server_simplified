@@ -31,39 +31,45 @@ namespace ProjektKlient_Server
         public MainWindow()
         {
             server = new MyTcpListener();
-            //server.StateInfo += Server_StateInfo;
+            server.StateInfo += Server_StateInfo;
             InitializeComponent();
 
         }
 
-        //private void Server_StateInfo(object sender, EventArgs e)
-        //{
-        //    if ( e is MyTcpListenerEventArgs)
-        //    {
-        //        MyTcpListenerEventArgs myArgs = e as MyTcpListenerEventArgs;
-        //        if (myArgs.ServerState == true)
-        //        {
-        //            this.ServerStateDisp.Text = "Serwer włączony";
-        //            this.ServerStateDisp.Foreground = Brushes.Green;
-        //        }
-        //        else
-        //        {
-        //            this.ServerStateDisp.Text = "Serwer wyłączony";
-        //            this.ServerStateDisp.Foreground = Brushes.Red;
-        //        }
-        //        if (myArgs.ClientState == true)
-        //        {
-        //            this.ClientStateDisp.Text = "Klient podłączony";
-        //            this.ClientStateDisp.Foreground = Brushes.Green;
-        //        }
-        //        else 
-        //        { 
-        //            this.ClientStateDisp.Text = "Klient niepodłączony";
-        //            this.ClientStateDisp.Foreground = Brushes.Red;
-        //        }
-        //    }
-            
-        //}
+        private void Server_StateInfo(object sender, EventArgs e)
+        {
+            if (e is MyTcpListenerEventArgs)
+            {
+                MyTcpListenerEventArgs myArgs = e as MyTcpListenerEventArgs;
+                this.LogBox.Text +=string.Format("\nDelegat odebrany z argumentami ServerState: {0}, ClientState: {1} \n",myArgs.ServerState,myArgs.ClientState);
+                
+                if (myArgs.ServerState == true)
+                {
+                    this.ServerStateDisp.Text = "Serwer włączony";
+                    this.ServerStateDisp.Foreground = Brushes.Green;
+                    this.LogBox.Text += ("ServerStateDisp set: Text Serwer włączony, Foreground Gree\n\n");
+                }
+                else
+                {
+                    this.ServerStateDisp.Text = "Serwer wyłączony";
+                    this.ServerStateDisp.Foreground = Brushes.Red;
+                    this.LogBox.Text += ("ServerStateDisp set: Text Serwer wyłączony, Foreground Red\n\n");
+                }
+                if (myArgs.ClientState == true)
+                {
+                    this.ClientStateDisp.Text = "Klient podłączony";
+                    this.ClientStateDisp.Foreground = Brushes.Green;
+                    this.LogBox.Text += ("ClientStateDisp set: Text Serwer włączony, Foreground green\n\n");
+                }
+                else
+                {
+                    this.ClientStateDisp.Text = "Klient niepodłączony";
+                    this.ClientStateDisp.Foreground = Brushes.Red;
+                    this.LogBox.Text += ("ClientStateDisp set: Text Serwer włączony, Foreground Red\n\n");
+                }
+            }
+
+        }
 
         public void WybierzPlik_Click(object sender, RoutedEventArgs e)
         {
@@ -109,6 +115,7 @@ namespace ProjektKlient_Server
                 //Zatrzymanie serwera
                 server.StopServer();
                 server.ServerOn = false;
+                this.LogBox.Text = "";
                 this.StartStopButton.Content = "Start Server";
                 this.PortComboBox.IsEnabled = true;
             }

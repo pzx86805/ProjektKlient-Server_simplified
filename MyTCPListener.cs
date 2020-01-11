@@ -33,13 +33,17 @@ namespace ProjektKlient_Server
                 server = new TcpListener(localAddr, port);
                 if(mainWindow.fs == null) { mainWindow.WybierzPlik_Click(this, null); }
                 server.Start();  // this will start the server
+                this.ServerOn = true;
                 mainWindow.LogBox.Text += "Serwer aktywny\n";
-                mainWindow.ServerStateDisp.Text = "Serwer aktywny";
+                myargs = new MyTcpListenerEventArgs(this.ServerOn, this.ClientConnected);
+                NewState(myargs);
                 while (true)   //we wait for a connection
                 {
                     client = server.AcceptTcpClient();  //if a connection exists, the server will accept it ( tylko 1 )
+                    this.ClientConnected = true;
                     mainWindow.LogBox.Text += "Klient połączony\n";
-                    mainWindow.ClientStateDisp.Text = "Klient połączony";
+                    myargs = new MyTcpListenerEventArgs(this.ServerOn, this.ClientConnected);
+                    NewState(myargs);
                     NetworkStream ns = client.GetStream();
                     mainWindow.fs.CopyTo(ns); // like ns.write simplier
                     ns.Close();
@@ -49,28 +53,18 @@ namespace ProjektKlient_Server
             }
             catch (SocketException e)
             {
-                Console.WriteLine("SocketException: {0}", e);
-                ServerOn = false;
-                ClientConnected = false;
-                server.Stop();
+                mainWindow.LogBox.Text+=string.Format("SocketException: {0}", e);
+                StopServer();
             }
             catch (Exception e)
             {
-                mainWindow.LogBox.Text += e;
-                ServerOn = false;
-                ClientConnected = false;
-                server.Stop();
+                mainWindow.LogBox.Text += string.Format("Exception: {0}", e);
+                StopServer();
             }
             finally
             {
-                mainWindow.LogBox.Text += "Serwer zakończył nadawanie, zostaje wyłączony";
-                mainWindow.PortComboBox.IsEnabled = true;
-                mainWindow.ServerStateDisp.Text = "Serwer wyłączony";
-                mainWindow.ClientStateDisp.Text = "Brak klienta";
-                ServerOn = false;
-                ClientConnected = false;
-                client.Close();
-                server.Stop();
+                mainWindow.LogBox.Text += "Serwer zakończył nadawanie\n";
+                StopServer();
             }
         }
         /// <summary>
@@ -90,7 +84,12 @@ namespace ProjektKlient_Server
         //Zatrzymaj serwer
         public void StopServer()
         {
+            client.Close();
+            this.ClientConnected = false;
             server.Stop();
+            this.ServerOn = false;
+            myargs = new MyTcpListenerEventArgs(this.ServerOn, this.ClientConnected);
+            NewState(myargs);
         }
     }
     class MyTcpListenerEventArgs : EventArgs
