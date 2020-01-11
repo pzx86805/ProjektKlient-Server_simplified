@@ -20,56 +20,31 @@ namespace ProjektKlient_Server
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="port">Podaj port z którego ma korzystać serwer</param>
-        public void CreateAndStartListeningServer(Int32 port)
+        /// <param name="port">Port na którym serwer będzie nasłuchiwać</param>
+        /// <param name="filePath">Scieżka do pliku</param>
+        /// <param name="fileContent">Zawartość pliku</param>
+        public void CreateAndStartListeningServer(Int32 port, MainWindow mainWindow)
         {
             try
             {
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+
+                //Nowy TcpListener z adresem lokalnym i portem z kontrolki PortComboBox
                 server = new TcpListener(localAddr, port);
-
-                // Start listening for client requests.
-                server.Start();
-                this.ServerOn = true;
-                myargs = new MyTcpListenerEventArgs(this.ServerOn, this.ClientConnected);
-                NewState(myargs);
-                // Enter the listening loop.
-                while (true)
+                if(mainWindow.fs == null) { mainWindow.WybierzPlik_Click(this, null); }
+                server.Start();  // this will start the server
+                mainWindow.LogBox.Text += "Serwer aktywny\n";
+                mainWindow.ServerStateDisp.Text = "Serwer aktywny";
+                while (true)   //we wait for a connection
                 {
-                    // Wait for Client
-                    client = server.AcceptTcpClient();
-                    if (client != null) { ClientConnected = true; }
-                    MyTcpListenerEventArgs myargs = new MyTcpListenerEventArgs(this.ServerOn, this.ClientConnected);
-                    NewState(myargs);
-                    // Buffer for reading data
-                    Byte[] bytes = new Byte[256];
-                    String data = null;
-                    data = null;
-
-                    // Get a stream object for reading and writing
-                    NetworkStream stream = client.GetStream();
-
-                    int i;
-
-                    // Loop to receive all the data sent by the client.
-                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
-                        // Translate data bytes to a ASCII string.
-                        // Received
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-
-                        // Process the data sent by the client.
-                        // Processing
-                        data = data.ToUpper();
-
-                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-
-                        // Send back a response.
-                        // Response
-                        stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Sent: {0}", data);
-                    }
+                    client = server.AcceptTcpClient();  //if a connection exists, the server will accept it ( tylko 1 )
+                    mainWindow.LogBox.Text += "Klient połączony\n";
+                    mainWindow.ClientStateDisp.Text = "Klient połączony";
+                    NetworkStream ns = client.GetStream();
+                    mainWindow.fs.CopyTo(ns); // like ns.write simplier
+                    ns.Close();
+                    mainWindow.LogBox.Text += "Wysyłanie danych zakończone\n";
+                    break;
                 }
             }
             catch (SocketException e)
@@ -77,6 +52,24 @@ namespace ProjektKlient_Server
                 Console.WriteLine("SocketException: {0}", e);
                 ServerOn = false;
                 ClientConnected = false;
+                server.Stop();
+            }
+            catch (Exception e)
+            {
+                mainWindow.LogBox.Text += e;
+                ServerOn = false;
+                ClientConnected = false;
+                server.Stop();
+            }
+            finally
+            {
+                mainWindow.LogBox.Text += "Serwer zakończył nadawanie, zostaje wyłączony";
+                mainWindow.PortComboBox.IsEnabled = true;
+                mainWindow.ServerStateDisp.Text = "Serwer wyłączony";
+                mainWindow.ClientStateDisp.Text = "Brak klienta";
+                ServerOn = false;
+                ClientConnected = false;
+                client.Close();
                 server.Stop();
             }
         }
@@ -93,6 +86,8 @@ namespace ProjektKlient_Server
                 newStateInfo(this, e);
             }
         }
+        
+        //Zatrzymaj serwer
         public void StopServer()
         {
             server.Stop();

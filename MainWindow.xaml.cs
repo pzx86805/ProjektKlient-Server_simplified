@@ -24,52 +24,54 @@ namespace ProjektKlient_Server
     /// </summary>
     public partial class MainWindow : Window
     {
-        MyTcpListener server = new MyTcpListener();
+        MyTcpListener server = null;
+        public Stream fs = null;
+        public string fileContent = string.Empty;
+        public string filePath = string.Empty;
         public MainWindow()
         {
-            server.StateInfo += Server_StateInfo;
+            server = new MyTcpListener();
+            //server.StateInfo += Server_StateInfo;
             InitializeComponent();
 
         }
 
-        private void Server_StateInfo(object sender, EventArgs e)
-        {
-            if ( e is MyTcpListenerEventArgs)
-            {
-                MyTcpListenerEventArgs myArgs = e as MyTcpListenerEventArgs;
-                if (myArgs.ServerState == true)
-                {
-                    this.ServerStateDisp.Text = "Serwer włączony";
-                    this.ServerStateDisp.Foreground = Brushes.Green;
-                }
-                else
-                {
-                    this.ServerStateDisp.Text = "Serwer wyłączony";
-                    this.ServerStateDisp.Foreground = Brushes.Red;
-                }
-                if (myArgs.ClientState == true)
-                {
-                    this.ClientStateDisp.Text = "Klient podłączony";
-                    this.ClientStateDisp.Foreground = Brushes.Green;
-                }
-                else 
-                { 
-                    this.ClientStateDisp.Text = "Klient niepodłączony";
-                    this.ClientStateDisp.Foreground = Brushes.Red;
-                }
-            }
+        //private void Server_StateInfo(object sender, EventArgs e)
+        //{
+        //    if ( e is MyTcpListenerEventArgs)
+        //    {
+        //        MyTcpListenerEventArgs myArgs = e as MyTcpListenerEventArgs;
+        //        if (myArgs.ServerState == true)
+        //        {
+        //            this.ServerStateDisp.Text = "Serwer włączony";
+        //            this.ServerStateDisp.Foreground = Brushes.Green;
+        //        }
+        //        else
+        //        {
+        //            this.ServerStateDisp.Text = "Serwer wyłączony";
+        //            this.ServerStateDisp.Foreground = Brushes.Red;
+        //        }
+        //        if (myArgs.ClientState == true)
+        //        {
+        //            this.ClientStateDisp.Text = "Klient podłączony";
+        //            this.ClientStateDisp.Foreground = Brushes.Green;
+        //        }
+        //        else 
+        //        { 
+        //            this.ClientStateDisp.Text = "Klient niepodłączony";
+        //            this.ClientStateDisp.Foreground = Brushes.Red;
+        //        }
+        //    }
             
-        }
+        //}
 
-        private void WybierzPlik_Click(object sender, RoutedEventArgs e)
+        public void WybierzPlik_Click(object sender, RoutedEventArgs e)
         {
-            var fileContent = string.Empty;
-            var filePath = string.Empty;
+            fileContent = string.Empty;
+            filePath = string.Empty;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             try
             {
-
-
                 openFileDialog.InitialDirectory = "c:\\";
                 openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 2;
@@ -82,12 +84,7 @@ namespace ProjektKlient_Server
                     FilePathDisp.Text = filePath.ToString();
                     FileSizeDisp.Text = new FileInfo(filePath).Length.ToString() + " bytes";
                     //Read the contents of the file into a stream
-                    var fileStream = openFileDialog.OpenFile();
-
-                    using (StreamReader reader = new StreamReader(fileStream))
-                    {
-                        fileContent = reader.ReadToEnd();
-                    }
+                    fs = openFileDialog.OpenFile();
                 }
             }
             catch (Exception ex)
@@ -102,7 +99,7 @@ namespace ProjektKlient_Server
             if (server.ServerOn == false)
             {
                 //Start serwera na porcie wskazanym w comboboxie
-                server.CreateAndStartListeningServer(Int32.Parse(this.PortComboBox.Text.ToString()));
+                server.CreateAndStartListeningServer(Int32.Parse(this.PortComboBox.Text.ToString()), this);
                 server.ServerOn = true;
                 this.PortComboBox.IsEnabled = false;
                 this.StartStopButton.Content = "Stop Server";

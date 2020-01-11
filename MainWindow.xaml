@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektKlient_Server"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="312" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*"/>
@@ -37,11 +37,9 @@
                     <TextBlock x:Name="FileSizeDisp" Height="23" TextWrapping="Wrap"/>
                 </Border>
             </DockPanel>
-            <Button Content="Wyślij do klienta"/>
-            <ProgressBar Height="20" Visibility="Hidden"/>
         </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="1">
-            <TextBlock x:Name="LogBox" TextWrapping="Wrap" Height="418"/>
-        </StackPanel>
+        <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
+            <TextBlock x:Name="LogBox" TextWrapping="Wrap" Height="277"/>
+        </DockPanel>
     </Grid>
 </Window>
