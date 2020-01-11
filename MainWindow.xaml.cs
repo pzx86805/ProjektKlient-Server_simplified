@@ -26,14 +26,12 @@ namespace ProjektKlient_Server
     {
         MyTcpListener server = null;
         public Stream fs = null;
-        public string fileContent = string.Empty;
         public string filePath = string.Empty;
         public MainWindow()
         {
             server = new MyTcpListener();
             server.StateInfo += Server_StateInfo;
             InitializeComponent();
-
         }
 
         private void Server_StateInfo(object sender, EventArgs e)
@@ -73,7 +71,6 @@ namespace ProjektKlient_Server
 
         public void WybierzPlik_Click(object sender, RoutedEventArgs e)
         {
-            fileContent = string.Empty;
             filePath = string.Empty;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             try
